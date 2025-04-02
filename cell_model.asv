@@ -1,14 +1,15 @@
-function cell = Full_SPM_Matlab_OCV_Tushar()
+function cell_voltage = cell_model(delta)
 global Nx delta h Rpp Rpn ep en lp ln ctp ctn Dp Dn F R socn socp ap an deltap deltan
 
+cell=struct()
 
 % p denotes positive (cathode), n denotes negative (anode) 
 Nx = 2; % # of INTERNAL nodes 
 h = 1/(Nx+1); % spacing 
-delta = -0.1; %current density 
+%delta = -1; %current density 
 Rpp = 1e-6; %radius of sphere (um)
 Rpn = 1e-6;
-ep = 0.4; %porosity: space between particles and cell (non active material) 
+ep = 0.4; %porosity: space between particles and cell (non active material) (%) 
 en = 0.38;
 lp = 4.3e-5; %length of cathode 
 ln = 4.65e-5;
@@ -18,13 +19,16 @@ Dp = 7.5e-14; %diffusivity term
 Dn = 3.2e-14;
 F = 96487; % Faraday constant 
 R = 8.314;
-socn = 0.9867; %SOC: state of charge 
+socn = 0.9867; %SOC: state of charge - why are these different 
 socp = 0.424;
-ap = 3*(1-ep)/Rpp; % reformulation of parameters, ssa per volume ratio, wantt o be higher 
+ap = 3*(1-ep)/Rpp; % reformulation of parameters, SA per volume ratio, want to be higher 
 an = 3*(1-en)/Rpn;
 
-deltap=(-18.3*Rpp/ctp/Dp/ap/lp/F); % reformulation 
-deltan= (18.3*Rpn/ctn/Dn/an/ln/F);
+% deltap=delta-(-18.3*Rpp/ctp/Dn/an/ln/F); % reformulation 
+% deltan= delta-(-18.3*Rpp/ctp/Dp/ap/lp/F); 
+
+deltan=(-18.3*Rpp/ctp/Dn/an/ln/F); % reformulation 
+deltap= (-18.3*Rpp/ctp/Dp/ap/lp/F); 
 
 %Initial condition for concentrations
 %y = ones(Nx,1);
@@ -32,14 +36,9 @@ for i =1:Nx+2
     y(i) = socp;
 end
 
-for i =Nx+3:2*(Nx+2)
-    y(i) = socn;
-end
+y(Nx+1) = 1 % scaled - la
 
-y(2*(Nx+2)+1)=4.252625216,
-y(2*(Nx+2)+2)=0.0498500074;
-
-yp = zeros((2*(Nx+2)+2),1);
+yp = zeros(Nx+2)
 
 %time integration 
 tspan = [0 3600];
@@ -62,32 +61,36 @@ toc;
  Vp = y(:,2*(Nx+2)+1);
  %Negative elctrode voltage
  Vn = y(:,2*(Nx+2)+2);
- cell_voltage = Vp-Vn;
+ cell_voltage = (Vp-Vn) 
+ ysurfp;
+ ysurfn;
 
 
- cell.volt = cell_voltage; 
+ cell.volt = cell_voltage;
+ cell.surfp = ysurfp; 
+ cell.surfn = ysurfn; 
 
  
- %Plotting surface concentrations 
- figure(1);
- plot(t,ysurfp);
- hold on
- plot(t,ysurfn);
- xlabel("Time (s)");
- ylabel("Surface concentration");
-
- %plotting voltages
- figure(2)
- plot(t,Vp, "r");
- hold on
- plot(t,Vn, "k");
- xlabel("Time (s)");
- ylabel("Voltage (V)");
- 
- figure(3)
- plot(t,cell_voltage);
- xlabel("Time (s)");
- ylabel("Voltage (V)");
+ % %Plotting surface concentrations 
+ % figure(1);
+ % plot(t,ysurfp);
+ % hold on
+ % plot(t,ysurfn);
+ % xlabel("Time (s)");
+ % ylabel("Surface concentration");
+ % 
+ % %plotting voltages
+ % figure(2)
+ % plot(t,Vp, "r");
+ % hold on
+ % plot(t,Vn, "k");
+ % xlabel("Time (s)");
+ % ylabel("Voltage (V)");
+ % 
+ % figure(3)
+ % plot(t,cell_voltage);
+ % xlabel("Time (s)");
+ % ylabel("Voltage (V)");
 
 end
 
