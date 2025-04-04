@@ -24,6 +24,12 @@ socp = 0.424;
 ap = 3*(1-ep)/Rpp; % reformulation of parameters, SA per volume ratio, want to be higher 
 an = 3*(1-en)/Rpn;
 
+F = @(t, y, yp) [
+    yp(1) + y(1) - cos(t);
+    yp(2) - y(1) + sin(t)
+];
+
+
 % deltap=delta-(-18.3*Rpp/ctp/Dn/an/ln/F); % reformulation 
 % deltan= delta-(-18.3*Rpp/ctp/Dp/ap/lp/F); 
 
@@ -46,6 +52,7 @@ iapp = delta;
 %solution 
 %tic;
 opts = odeset('Stats','on','RelTol',1e-2,'AbsTol',1e-2,MaxOrder=5,BDF='on');
+
 [t,y] = ode15i(@(t,y,yp) dyneqn(t,y,yp,Nx, iapp, Rpp, Dp), tspan, y,yp,opts);
 %toc;
 
