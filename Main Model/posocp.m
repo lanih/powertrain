@@ -6,3 +6,4 @@ function V = posocp(sto)
           - 73.083 * y.^8 + 95.96 * y.^10;
     V = num ./ den;
 end
+

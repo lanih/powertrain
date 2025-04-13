@@ -1,10 +1,6 @@
-function Fres = battery_voltage(t, y, yp)
-    % Define or bring in global/constants as needed
-    % global PTS deltar_n Dsp iparticle_n n F_const
-    % global PTS;
-    PTS = 50;
-
+function Fres = spm_resf(t, y, yp, PTS)
     Fres = zeros(2*PTS + 2, 1);  % Initialize residual vector
+    
     F_const = 96485.;
     iappt = 27.263836618115; 
 
