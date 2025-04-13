@@ -1,8 +1,8 @@
-function Fres = spm_resf(t, y, yp, PTS)
+function Fres = spm_resf(t, y, yp, PTS, iappt)
     Fres = zeros(2*PTS + 2, 1);  % Initialize residual vector
     
     F_const = 96485.;
-    iappt = 27.263836618115; 
+    % iappt = 27.263836618115; 
 
     Rp = 2.0e-6;    
     Dsp = 1.0e-14;
