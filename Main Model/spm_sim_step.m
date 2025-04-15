@@ -76,7 +76,7 @@ title('Battery Solution w/ode15i');
 legend show;
 
 figure;
-plot(tfull, yfull(:,2*PTS+1)-yfull(:,2*PTS+2), 'g-', 'DisplayName', 'Voltage v(t)');
+plot(tfull, yfull(:,2*PTS+1)-yfull(:,2*PTS+2), 'g-', 'DisplayName', 'Voltage v(t)', 'LineWidth', 5);
 hold on;
 grid on;
 xlabel('Time t');

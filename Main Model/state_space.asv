@@ -24,7 +24,7 @@ rpm(1) = param.initial_speed/param.tire_radius;
 current(1) = param.initial_current; 
 voltage(1) = param.initial_voltage;
 
-PTS = param.battery_pts;
+PTS = param.batt
 t0 = 0;
 
 % initial unscaled SOC from safari paper, SPM model
@@ -37,12 +37,23 @@ yp0_guess = zeros(2*PTS+2, 1);
 y_fixed   = [ones(2*PTS, 1); zeros(2,1)];   
 yp_fixed  = [zeros(2*PTS, 1); zeros(2,1)];  
 
+
 % Compute consistent initial conditions
-i_guess = 10;
-[y0, yp0] = decic(@(t,y,yp)spm_resf(t, y, yp, PTS, i_guess), t0, y0_guess, y_fixed, yp0_guess, yp_fixed);
+[y0, yp0] = decic(@(t,y,yp)spm_resf(t, y, yp, PTS, IAPPT), t0, y0_guess, y_fixed, yp0_guess, yp_fixed);
+
+function [value, isterminal, direction] = STOP_undervolt(t, y, yp, PTS)
+    value = (y(PTS*2+1) - y(PTS*2+2)) - 3.0;  
+    isterminal = 1;
+    direction = -1; % crossing from above
+end
+
+% Options with custom tolerances
+options = odeset('RelTol', 1e-5, 'AbsTol', 1e-6, 'MaxStep', 1, 'Events', @(t,y,yp)STOP_undervolt(t,y,yp,PTS),MaxOrder=2,BDF='on');
 
 y00 = y0;
 yp00 = yp0;
+tstart = t0;
+dt = 100;
 
 for t = 2:param.time_steps
 
@@ -56,19 +67,13 @@ for t = 2:param.time_steps
     speed(t) = new_speed; 
     rpm(t) = new_rpm;
 
-    % TODO: need to scale current
-    [y0, yp0, volt] = spm_sim_statespace(t-1, y00, yp00, PTS, current(t-1), 1.0);
-    voltage(t) = volt; 
-
-    y00 = y0;
-    yp00 = yp0;
+    voltage(t) = thin_film_electrode(current(t-1)); 
 
     current(t) = power(t)/voltage(t); 
 
     
 end
 
-end
 
 
 

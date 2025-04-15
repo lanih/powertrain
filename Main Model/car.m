@@ -15,6 +15,8 @@ param.time_steps = 10; % s
 param.initial_voltage = 600; % V
 param.initial_current = 10; % A
 
+param.battery_pts = 50;
+
 %% Call state_space function 
 
 

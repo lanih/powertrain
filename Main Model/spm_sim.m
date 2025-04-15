@@ -36,15 +36,13 @@ sol = ode15i(@(t,y,yp)spm_resf(t, y, yp, PTS), tspan, y0, yp0, options);
 t = sol.x;
 y = sol.y';
 
-stopp = sol.xe;
-
-if isempty(stopp);
-    disp(true)
-else
-    disp(false)
-end
-
-[y1,yp1] = deval(sol,sol.x(end));
+% stopp = sol.xe;
+% 
+% if isempty(stopp);
+%     disp(true)
+% else
+%     disp(false)
+% end
 
 
 % Plot the results
