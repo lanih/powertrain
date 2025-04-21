@@ -46,21 +46,21 @@ y = sol.y';
 
 
 % Plot the results
-figure;
-plot(t, y(:,PTS), 'b-', 'DisplayName', 'Cathode c(t)');
-hold on;
-plot(t, y(:,2*PTS), 'r-', 'DisplayName', 'Anode c(t)');
-grid on;
-xlabel('Time t');
-ylabel('Concentration');
-title('Battery Solution w/ode15i');
-legend show;
-
-figure;
-plot(t, y(:,2*PTS+1)-y(:,2*PTS+2), 'g-', 'DisplayName', 'Voltage v(t)');
-hold on;
-grid on;
-xlabel('Time t');
-ylabel('Voltage');
-title('Battery Solution w/ode15i');
-legend show;
+% figure;
+% plot(t, y(:,PTS), 'b-', 'DisplayName', 'Cathode c(t)');
+% hold on;
+% plot(t, y(:,2*PTS), 'r-', 'DisplayName', 'Anode c(t)');
+% grid on;
+% xlabel('Time t');
+% ylabel('Concentration');
+% title('Battery Solution w/ode15i');
+% legend show;
+% 
+% figure;
+% plot(t, y(:,2*PTS+1)-y(:,2*PTS+2), 'g-', 'DisplayName', 'Voltage v(t)');
+% hold on;
+% grid on;
+% xlabel('Time t');
+% ylabel('Voltage');
+% title('Battery Solution w/ode15i');
+% legend show;
